@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Información Personal -->
+
         <TextView
             android:id="@+id/tvPersonalInfo"
             android:layout_width="wrap_content"
@@ -60,7 +60,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextApellido" />
 
-        <!-- Género (RadioButtons) -->
+
         <TextView
             android:id="@+id/tvGenero"
             android:layout_width="wrap_content"
@@ -138,8 +138,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/TextPhone" />
 
-        <!-- Información Académica (CheckBoxes) -->
-        <TextView
+      <TextView
             android:id="@+id/tvAcademica"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -186,7 +185,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cbUniversidad" />
 
-        <!-- Preferencias (CheckBoxes) -->
+
         <TextView
             android:id="@+id/tvPreferencias"
             android:layout_width="wrap_content"
@@ -234,7 +233,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cbCine" />
 
-        <!-- Spinner para país -->
+
         <TextView
             android:id="@+id/tvPais"
             android:layout_width="wrap_content"
@@ -253,7 +252,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvPais" />
 
-        <!-- Botones -->
+
         <Button
             android:id="@+id/bt1"
             android:layout_width="0dp"

@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <!-- Campo de búsqueda -->
+
         <EditText
             android:id="@+id/editTextText"
             android:layout_width="0dp"
@@ -35,8 +35,7 @@
             app:layout_constraintStart_toEndOf="@+id/editTextText"
             app:layout_constraintTop_toTopOf="@+id/editTextText" />
 
-        <!-- Campos de información (solo valores) -->
-        <TextView
+       <TextView
             android:id="@+id/tvNombre"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -126,7 +125,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvPreferencias" />
 
-        <!-- Botones -->
 
 
 
