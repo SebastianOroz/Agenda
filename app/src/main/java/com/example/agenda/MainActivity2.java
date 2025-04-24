@@ -1,7 +1,8 @@
 package com.example.agenda;
 
-import android.app.ComponentCaller;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -9,15 +10,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.activity.EdgeToEdge;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
-
-import java.util.ArrayList;
 
 public class MainActivity2 extends AppCompatActivity {
 
@@ -25,22 +18,27 @@ public class MainActivity2 extends AppCompatActivity {
     TextView tvNombre, tvApellidos, tvEdad, tvEmail, tvTelefono,
             tvDireccion, tvGenero, tvAcademica, tvPreferencias, tvPais;
     EditText editTextCodigo;
-    ArrayList<ArrayList<String>> usuarios;
 
-
-
+    private usuariosSQLiteOpenHelper admin;
+    private SQLiteDatabase bd;
+    private int usuarioActualId = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main2);
 
+
+        admin = new usuariosSQLiteOpenHelper(this);
+        bd = admin.getReadableDatabase();
 
 
         cerrar = findViewById(R.id.bt2);
         buscar = findViewById(R.id.buscar);
+        btnEditar = findViewById(R.id.btnEditar);
+        btnCalculadora = findViewById(R.id.btnCalculadora);
         editTextCodigo = findViewById(R.id.editTextText);
+
 
         tvNombre = findViewById(R.id.tvNombre);
         tvApellidos = findViewById(R.id.tvApellidos);
@@ -52,16 +50,7 @@ public class MainActivity2 extends AppCompatActivity {
         tvAcademica = findViewById(R.id.tvAcademica);
         tvPreferencias = findViewById(R.id.tvPreferencias);
         tvPais = findViewById(R.id.tvPais);
-
-
-
-        // Obtener lista de usuarios
-        usuarios = (ArrayList<ArrayList<String>>) getIntent().getSerializableExtra("usuarios");
-
-        btnCalculadora = findViewById(R.id.btnCalculadora);
     }
-
-
 
     public void Buscar(View v) {
         String codigoStr = editTextCodigo.getText().toString();
@@ -73,35 +62,64 @@ public class MainActivity2 extends AppCompatActivity {
 
         try {
             int codigo = Integer.parseInt(codigoStr);
-            boolean encontrado = false;
+            this.usuarioActualId = codigo;
 
-            for (ArrayList<String> datosUsuario : usuarios) {
-                if (Integer.parseInt(datosUsuario.get(0)) == codigo) {
+            Cursor cursor = bd.query(
+                    "usuarios",
+                    new String[]{"nombre", "apellidos", "edad", "genero", "email",
+                            "telefono", "direccion", "formacion", "preferencias", "pais"},
+                    "id = ?",
+                    new String[]{String.valueOf(codigo)},
+                    null, null, null);
 
-                    tvNombre.setText(datosUsuario.get(1));
-                    tvApellidos.setText(datosUsuario.get(2));
-                    tvEdad.setText(datosUsuario.get(3));
-                    tvGenero.setText(datosUsuario.get(4));
-                    tvEmail.setText(datosUsuario.get(5));
-                    tvTelefono.setText(datosUsuario.get(6));
-                    tvDireccion.setText(datosUsuario.get(7));
-                    tvAcademica.setText(datosUsuario.get(8));
-                    tvPreferencias.setText(datosUsuario.get(9));
-                    tvPais.setText(datosUsuario.get(10));
+            if (cursor.moveToFirst()) {
 
-                    encontrado = true;
-                    break;
-                }
-            }
+                tvNombre.setText(cursor.getString(0));
+                tvApellidos.setText(cursor.getString(1));
+                tvEdad.setText(cursor.getString(2));
+                tvGenero.setText(cursor.getString(3));
+                tvEmail.setText(cursor.getString(4));
+                tvTelefono.setText(cursor.getString(5));
+                tvDireccion.setText(cursor.getString(6));
+                tvAcademica.setText(cursor.getString(7));
+                tvPreferencias.setText(cursor.getString(8));
+                tvPais.setText(cursor.getString(9));
 
-            if (!encontrado) {
+
+                btnEditar.setEnabled(true);
+            } else {
                 Toast.makeText(this, "Usuario no encontrado", Toast.LENGTH_SHORT).show();
                 limpiarCampos();
+                btnEditar.setEnabled(false);
             }
+
+            cursor.close();
 
         } catch (NumberFormatException e) {
             Toast.makeText(this, "Código inválido", Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void Editar(View v) {
+        if (usuarioActualId == -1) {
+            Toast.makeText(this, "Primero busque un usuario", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("MODO_EDICION", true);
+        intent.putExtra("USUARIO_ID", usuarioActualId);
+        startActivity(intent);
+        finish();
+    }
+
+    public void irACalculadora(View v) {
+        Intent intent = new Intent(this, MainActivity3.class);
+        startActivity(intent);
+    }
+
+    public void Cerrar(View v) {
+        finish();
     }
 
     private void limpiarCampos() {
@@ -117,15 +135,14 @@ public class MainActivity2 extends AppCompatActivity {
         tvPais.setText("País");
     }
 
-
-
-    public void irACalculadora(View v) {
-        Intent intent = new Intent(this, MainActivity3.class);
-        startActivity(intent);
-    }
-
-
-    public void Cerrar(View v) {
-        finish();
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (bd != null) {
+            bd.close();
+        }
+        if (admin != null) {
+            admin.close();
+        }
     }
 }

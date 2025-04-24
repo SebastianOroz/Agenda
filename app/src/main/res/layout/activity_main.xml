@@ -13,16 +13,39 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
+        <!-- Campo de ID -->
+        <TextView
+            android:id="@+id/tvId"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Identificación"
+            android:textSize="16sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
+        <EditText
+            android:id="@+id/editTextId"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ems="10"
+            android:hint="Número de identificación"
+            android:inputType="number"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvId" />
+
+        <!-- Información Personal -->
         <TextView
             android:id="@+id/tvPersonalInfo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="Información Personal"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/editTextId" />
 
         <EditText
             android:id="@+id/editTextNombre"
@@ -60,7 +83,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editTextApellido" />
 
-
+        <!-- Género -->
         <TextView
             android:id="@+id/tvGenero"
             android:layout_width="wrap_content"
@@ -102,6 +125,7 @@
                 android:text="Otro" />
         </RadioGroup>
 
+        <!-- Contacto -->
         <EditText
             android:id="@+id/TextEmail"
             android:layout_width="0dp"
@@ -120,7 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:hint="Telefono"
+            android:hint="Teléfono"
             android:inputType="phone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -132,18 +156,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:ems="10"
-            android:hint="Direccion"
+            android:hint="Dirección"
             android:inputType="text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/TextPhone" />
 
-      <TextView
+        <!-- Formación Académica -->
+        <TextView
             android:id="@+id/tvAcademica"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
-            android:text="Información Académica"
+            android:text="Formación Académica"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -185,7 +210,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cbUniversidad" />
 
-
+        <!-- Preferencias -->
         <TextView
             android:id="@+id/tvPreferencias"
             android:layout_width="wrap_content"
@@ -233,13 +258,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cbCine" />
 
-
+        <!-- País -->
         <TextView
             android:id="@+id/tvPais"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="País"
+            android:textSize="16sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cbLectura" />
 
@@ -252,30 +278,54 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tvPais" />
 
-
+        <!-- Botones -->
         <Button
-            android:id="@+id/bt1"
+            android:id="@+id/btnGuardar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            android:onClick="Abrir"
-            android:text="Crear"
-            app:layout_constraintEnd_toStartOf="@+id/b2"
+            android:onClick="Guardar"
+            android:text="Guardar"
+            app:layout_constraintEnd_toStartOf="@+id/btnBuscar"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/spinnerPais" />
 
         <Button
-            android:id="@+id/b2"
+            android:id="@+id/btnBuscar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
             android:onClick="Intento"
             android:text="Buscar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/bt1"
+            app:layout_constraintEnd_toStartOf="@+id/btnVaciar"
+            app:layout_constraintStart_toEndOf="@+id/btnGuardar"
             app:layout_constraintTop_toBottomOf="@+id/spinnerPais" />
+
+        <Button
+            android:id="@+id/btnVaciar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:onClick="Vaciar"
+            android:text="Vaciar Campos"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/btnBuscar"
+            app:layout_constraintTop_toBottomOf="@+id/spinnerPais" />
+
+        <Button
+            android:id="@+id/btnCerrar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Cerrar"
+            android:onClick="Cerrar"
+            android:textColor="#FFFFFF"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnVaciar" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

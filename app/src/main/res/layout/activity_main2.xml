@@ -128,6 +128,31 @@
 
 
 
+
+        <Button
+            android:id="@+id/btnEditar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:onClick="Editar"
+            android:text="Editar"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvPais" />
+
+
+        <Button
+            android:id="@+id/btnCalculadora"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:onClick="irACalculadora"
+            android:text="Calculadora"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnEditar" />
+
+
         <Button
             android:id="@+id/bt2"
             android:layout_width="0dp"
@@ -136,21 +161,7 @@
             android:onClick="Cerrar"
             android:text="Cerrar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btnCalculadora" />
-
-        <Button
-            android:id="@+id/btnCalculadora"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:onClick="irACalculadora"
-            android:text="Calculadora"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tvPais" />
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

@@ -4,20 +4,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity3 extends AppCompatActivity {
 
     EditText etPantalla;
-    String operacion = "";
-    double numero1 = 0;
-    double numero2 = 0;
-    boolean puntoDecimalPresionado = false;
+    String operacionPendiente = "";
+    double resultadoParcial = 0;
+    boolean nuevaOperacion = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,15 +20,22 @@ public class MainActivity3 extends AppCompatActivity {
 
         etPantalla = findViewById(R.id.etPantalla);
 
+
+        findViewById(R.id.btnCerrar).setOnClickListener(v -> finish());
+
+
         int[] botonesNumericos = {R.id.btn0, R.id.btn1, R.id.btn2, R.id.btn3, R.id.btn4,
                 R.id.btn5, R.id.btn6, R.id.btn7, R.id.btn8, R.id.btn9};
 
         for (int id : botonesNumericos) {
-            findViewById(id).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Button boton = (Button) v;
-                    String valorActual = etPantalla.getText().toString();
+            findViewById(id).setOnClickListener(v -> {
+                Button boton = (Button) v;
+                String valorActual = etPantalla.getText().toString();
+
+                if (nuevaOperacion) {
+                    etPantalla.setText(boton.getText());
+                    nuevaOperacion = false;
+                } else {
                     if (valorActual.equals("0")) {
                         etPantalla.setText(boton.getText());
                     } else {
@@ -44,98 +45,101 @@ public class MainActivity3 extends AppCompatActivity {
             });
         }
 
-        findViewById(R.id.btnDecimal).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String valorActual = etPantalla.getText().toString();
 
-
-                if (!valorActual.contains(".")) {
-
-                    if (valorActual.isEmpty() || valorActual.equals("0")) {
-                        etPantalla.setText("0.");
-                    } else {
-                        etPantalla.setText(valorActual + ".");
-                    }
-                    puntoDecimalPresionado = true;
+        findViewById(R.id.btnDecimal).setOnClickListener(v -> {
+            String valorActual = etPantalla.getText().toString();
+            if (!valorActual.contains(".")) {
+                if (valorActual.isEmpty() || nuevaOperacion) {
+                    etPantalla.setText("0.");
+                    nuevaOperacion = false;
+                } else {
+                    etPantalla.setText(valorActual + ".");
                 }
             }
         });
 
+
         int[] botonesOperaciones = {R.id.btnSumar, R.id.btnRestar, R.id.btnMultiplicar, R.id.btnDividir};
         for (int id : botonesOperaciones) {
-            findViewById(id).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Button boton = (Button) v;
-                    numero1 = Double.parseDouble(etPantalla.getText().toString());
-                    operacion = boton.getText().toString();
-                    etPantalla.setText("0");
-                    puntoDecimalPresionado = false;
+            findViewById(id).setOnClickListener(v -> {
+                Button boton = (Button) v;
+                String operacion = boton.getText().toString();
+                String valorPantalla = etPantalla.getText().toString();
+
+                if (!nuevaOperacion) {
+                    calcularResultadoParcial();
                 }
+
+                operacionPendiente = operacion;
+                nuevaOperacion = true;
             });
         }
 
-        findViewById(R.id.btnIgual).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                numero2 = Double.parseDouble(etPantalla.getText().toString());
-                double resultado = 0;
-                switch(operacion){
+
+        findViewById(R.id.btnIgual).setOnClickListener(v -> {
+            if (!nuevaOperacion) {
+                calcularResultadoParcial();
+            }
+            operacionPendiente = "";
+            nuevaOperacion = true;
+        });
+
+
+        findViewById(R.id.btnBorrar).setOnClickListener(v -> {
+            etPantalla.setText("0");
+            resultadoParcial = 0;
+            operacionPendiente = "";
+            nuevaOperacion = true;
+        });
+
+
+        findViewById(R.id.btnRetroceso).setOnClickListener(v -> {
+            String textoActual = etPantalla.getText().toString();
+            if (textoActual.length() > 1) {
+                etPantalla.setText(textoActual.substring(0, textoActual.length() - 1));
+            } else {
+                etPantalla.setText("0");
+                nuevaOperacion = true;
+            }
+        });
+    }
+
+    private void calcularResultadoParcial() {
+        try {
+            double numeroActual = Double.parseDouble(etPantalla.getText().toString());
+
+            if (operacionPendiente.isEmpty()) {
+                resultadoParcial = numeroActual;
+            } else {
+                switch (operacionPendiente) {
                     case "+":
-                        resultado = numero1 + numero2;
+                        resultadoParcial += numeroActual;
                         break;
                     case "-":
-                        resultado = numero1 - numero2;
+                        resultadoParcial -= numeroActual;
                         break;
                     case "*":
-                        resultado = numero1 * numero2;
+                        resultadoParcial *= numeroActual;
                         break;
                     case "/":
-                        if (numero2 != 0) {
-                            resultado = numero1 / numero2;
+                        if (numeroActual != 0) {
+                            resultadoParcial /= numeroActual;
                         } else {
                             etPantalla.setText("Error");
                             return;
                         }
                         break;
                 }
-
-                etPantalla.setText(String.valueOf(resultado));
-                operacion = "";
-                puntoDecimalPresionado = etPantalla.getText().toString().contains(".");
             }
-        });
 
-        findViewById(R.id.btnBorrar).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etPantalla.setText("0");
-                operacion = "";
-                numero1 = 0;
-                numero2 = 0;
-                puntoDecimalPresionado = false;
+
+            if (resultadoParcial % 1 == 0) {
+                etPantalla.setText(String.valueOf((long) resultadoParcial));
+            } else {
+                etPantalla.setText(String.valueOf(resultadoParcial));
             }
-        });
-
-        findViewById(R.id.btnRetroceso).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String textoActual = etPantalla.getText().toString();
-                if(!textoActual.isEmpty()){
-
-                    if (textoActual.endsWith(".")) {
-                        puntoDecimalPresionado = false;
-                    }
-
-                    String nuevoTexto = textoActual.substring(0, textoActual.length() - 1);
-                    etPantalla.setText(nuevoTexto);
-
-                    if (nuevoTexto.isEmpty()){
-                        etPantalla.setText("0");
-                    }
-                }
-            }
-        });
+        } catch (NumberFormatException e) {
+            etPantalla.setText("Error");
+        }
     }
 }
